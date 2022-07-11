@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" id="senate">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="shortcut icon" href="./img/favicon.ico.png" type="image/x-icon">
+    <title>Senators</title>
+</head>
+
+<body class="tablafiltros">
+    <div id="app">
+        
+    <header>
+        <div>
+            <div class="row">
+                <div class="col col-sm-12 col-md-6 ps-4 pt-2">
+                    <img id="logo" src="./img/logo-dig.jpg" alt="Logo de Data inside Group">
+                </div>
+                <div class="col col-sm-12 col-md-6 d-flex justify-content-center align-items-center">
+                    <h2>
+                        <a class="text-muted" href="mailto:info@datainsightgroup.net">✉info@datainsightgroup.net</a>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul class="nav nav-tabs bg-secondary" style="--bs-bg-opacity: .5;">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="./index.html">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" href="#" role="button"
+                    aria-expanded="false">Congress 113</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="./house.html">House</a></li>
+                    <li><a class="dropdown-item" href="#">Senate</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                    aria-expanded="false">Attendance</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="./houseatt.html">House</a></li>
+                    <li><a class="dropdown-item" href="./senateatt.html">Senate</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                    aria-expanded="false">Party Loyalty</a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="./houseployalty.html">House</a></li>
+                    <li><a class="dropdown-item" href="./senateployalty.html">Senate</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="p-4">
+        <h2 class="display-2 mt-3 mb-3">
+            Senators
+        </h2>
+        <p class="mt-2 h6">
+            First convened in 1789, the composition and powers of the Senate are established in Article One of the U.S.
+            Constitution. Each state is represented by two senators, regardless of population, who serve staggered
+            six-year terms. The Senate has several exclusive powers not granted to the House, including consenting to
+            treaties as a precondition to their ratification and consenting to or confirming appointments of Cabinet
+            secretaries, federal judges, other federal executive officials, military officers, regulatory officials,
+            ambassadors, and other federal uniformed officers, as well as trial of federal officials impeached by the
+            House.
+        </p>
+    </section>
+
+    <div class="row">
+        <div class="col">
+            <form class="formSenate d-flex p-4 gap-3 align-items-center" v-on:change="filtradoDePartido">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="partidos" value="R" name="Party" id="rep">
+                    <label class="form-check-label" for="rep">
+                        Republicans
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="partidos" value="D" name="Party" id="dem">
+                    <label class="form-check-label" for="dem">
+                        Democrats
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="partidos" value="ID" name="Party" id="ind">
+                    <label class="form-check-label" for="ind">
+                        Independent
+                    </label>
+                </div>     
+                <select class="form-select" aria-label="Default select example" name="states" id="estados" v-model="selected">
+                    <option value="All">All States</option>
+                    <option v-for="estado in estadosFiltrados" v-bind:value="estado">
+                        {{estado}}
+                    </option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <main class="p-4 table-responsive-md">
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover">
+                    <thead class="table table-hover table-bordered border border-dark bg-secondary" style="--bs-bg-opacity: .5;">
+                        <tr class="text-center">
+                            <th scope="col" class="table-bordered border border-dark">Name</th>
+                            <th scope="col" class="table-bordered border border-dark">Party</th>
+                            <th scope="col" class="table-bordered border border-dark">State</th>
+                            <th scope="col" class="table-bordered border border-dark">Year in Office</th>
+                            <th scope="col" class="table-bordered border border-dark">% votes w/Party</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabla-senate" class="text-center text-dark">
+                        <tr v-for="miembro in auxiliarEstados">
+                            <td>
+                                <a v-bind:href="miembro.url">{{miembro.first_name}} {{miembro.middle_name}} {{miembro.last_name}}</a>
+                            </td>
+                            <td>{{miembro.party}}</td>
+                            <td>{{miembro.state}}</td>
+                            <td>{{miembro.seniority}}</td>
+                            <td>{{miembro.votes_with_party_pct.toFixed(2)}} &#37</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{filtradoDePartido}}
+            </div>
+        </div>
+    </main>
+
+    <footer class="mb-2 d-flex justify-content-center align-items-center border bg-secondary" style="--bs-bg-opacity: .5;">
+        <div>
+            <div class="row">
+                <div class="col col-12 text-capitalize h5">
+                    &copy; 2022 data insight group | all rights reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <!-- <script src="./scripts/main.js"></script> -->
+    <script src="./scripts/mainvue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>
